@@ -1,5 +1,9 @@
 import Herramientas from "./Herramientas";
 import Previsualizar from "./Previsualizar";
+import React from "react";
+import { useState } from "react";
+import UploadImage from "./UploadImage";
+import { useRef } from "react";
 
 function Pizarra() {
   var hojas = [];
@@ -11,10 +15,21 @@ function Pizarra() {
     color = "#000000",
     color_aux = "#000000";
   let m = {};
+  
+  const [file, setFile] = useState("");
+  const [showImage, setShowImage] = useState("")
+  const canvasRef = useRef()
+
+  const handleChange= (event) =>{
+    setFile(event.target.files[0])
+    const showFile = URL.createObjectURL(event.target.files[0])
+    console.log(showFile)
+    setShowImage(showFile)
+  }
 
   function handleMouseDown(e) {
-    const mainCanvas = document.getElementById("pizarra");
-    m = oMousePos(mainCanvas, e);
+/*     const mainCanvas = document.getElementById("pizarra");
+ */    m = oMousePos(canvasRef.current, e);
     x = m.x;
     y = m.y;
     dibujando = true;
@@ -22,8 +37,8 @@ function Pizarra() {
 
   function handleMouseMove(e) {
     if (dibujando === true) {
-      const mainCanvas = document.getElementById("pizarra");
-      m = oMousePos(mainCanvas, e);
+/*       const mainCanvas = document.getElementById("pizarra");
+ */      m = oMousePos(canvasRef.current, e);
       dibujar(x, y, m.x, m.y);
       x = m.x;
       y = m.y;
@@ -32,12 +47,13 @@ function Pizarra() {
 
   function handleMouseUp(e) {
     if (dibujando === true) {
-      const mainCanvas = document.getElementById("pizarra");
-      m = oMousePos(mainCanvas, e);
+/*       const mainCanvas = document.getElementById("pizarra");
+ */      m = oMousePos(canvasRef.current, e);
       dibujar(x, y, m.x, m.y);
       x = 0;
       y = 0;
       dibujando = false;
+
     }
   }
 
@@ -158,10 +174,11 @@ function Pizarra() {
     grosor = g;
   };
 
+
   return (
-    <main className="main-container w3-mobile">
       <div className="w3-col s12">
         <canvas
+          ref={canvasRef}
           className="w3-card-4 w3-border"
           id="pizarra"
           width="1350"
@@ -169,8 +186,8 @@ function Pizarra() {
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
-        ></canvas>
-      </div>
+        >
+        </canvas>
       <Previsualizar></Previsualizar>
       <Herramientas
         f_setcolor={set_color}
@@ -181,7 +198,9 @@ function Pizarra() {
         f_deshacer={deshacer}
         f_load_img={load_image}
       ></Herramientas>
-    </main>
+        <UploadImage/>
+      </div>
+      
   );
 }
 
