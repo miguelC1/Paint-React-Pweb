@@ -2,7 +2,6 @@ import Herramientas from "./Herramientas";
 import Previsualizar from "./Previsualizar";
 import React from "react";
 import { useState } from "react";
-import UploadImage from "./UploadImage";
 import { useRef } from "react";
 
 function Pizarra() {
@@ -79,7 +78,8 @@ function Pizarra() {
   };
 
   const load_image = () => {
-    var archivo = document.getElementById("files");
+    console.log("load image")
+    var archivo = document.getElementById("file");
     if (archivo) {
       console.log(archivo);
       console.log("cargando imagen funcion load_image()");
@@ -198,7 +198,6 @@ function Pizarra() {
         f_deshacer={deshacer}
         f_load_img={load_image}
       ></Herramientas>
-        <UploadImage/>
       </div>
       
   );

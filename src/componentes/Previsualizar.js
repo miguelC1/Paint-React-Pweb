@@ -1,4 +1,6 @@
 import PropTypes from "prop-types";
+import React from "react";
+import { useState } from "react";
 
 function Previsualizar({
   f_descargar,
@@ -16,6 +18,9 @@ function Previsualizar({
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBD4HwNbon6rcgzao1bWhbEZ-z7h_XQ6a7Sg&usqp=CAU",
   ];
 
+  const [file, setFile] = useState("");
+  const [showImage, setShowImage] = useState("")
+
   function cargar() {
     var images = Object.values(document.getElementsByClassName("preview"));
     let c = 1;
@@ -25,15 +30,23 @@ function Previsualizar({
       c++;
     });
   }
+  const upload =(event)=>{
+    setFile(event.target.files[0])
+    const showFile = URL.createObjectURL(event.target.files[0])
+    setShowImage(showFile)
+    console.log("load")
+    const mainCanvas = document.getElementById("pizarra");
+      var context = mainCanvas.getContext("2d");
+      var img = new Image();
+      img.src = showFile
+      img.onload = function () {
+        context.drawImage(img, 200, 100, img.width, img.height);
+      };
+  }
   return (
     <div className="w3-col s12 w3-center">
       <div className="w3-card-1">
-        <img src="" alt="" className="preview" />
-        <img src="" alt="" className="preview" />
-        <img src="" alt="" className="preview" />
-        <button className="w3-button" onClick={cargar}>
-          cargar
-        </button>
+        <input type="file" name="file" onChange={upload}></input>
       </div>
     </div>
   );

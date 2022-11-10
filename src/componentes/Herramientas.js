@@ -8,16 +8,12 @@ function Herramientas({
   f_setgrosor,
   f_deshacer,
   f_load_img,
+
 }) {
-  function hola() {
-    console.log("holasdsa")
-    f_load_img();
-  }
+ 
   return (
     <div className="w3-col s12 w3-center">
       <div className="w3-card-2">
-        <input type="file" id="file" src="" alt="" onChange={hola}/>
-
         <button
           className="w3-button"
           href=""
