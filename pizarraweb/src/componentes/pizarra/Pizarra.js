@@ -4,7 +4,6 @@ import io from 'socket.io-client';
 import './style.css';
 
 class Pizarra extends Component{
-
     timeout;
     socket = io.connect("http://localhost:5000");
 
@@ -15,7 +14,7 @@ class Pizarra extends Component{
         super(props);
 
         this.socket.on("canvas-data", function(data){
-            console.log("console Canvas", data)
+            //console.log("console Canvas", data)
             var root = this;
             var interval = setInterval(function(){
                 if(root.isDrawing) return;
@@ -35,7 +34,7 @@ class Pizarra extends Component{
     }
 
     componentDidMount() {
-        this.drawOnCanvas();
+        this.dibujarEnCanvas();
     }
 
     componentWillReceiveProps(newProps) {
@@ -43,7 +42,7 @@ class Pizarra extends Component{
         this.ctx.lineWidth = newProps.size;
     }
 
-    drawOnCanvas() {
+    dibujarEnCanvas() {
         var canvas = document.querySelector('#board');
         this.ctx = canvas.getContext('2d');
         var ctx = this.ctx;
@@ -53,10 +52,27 @@ class Pizarra extends Component{
         canvas.width = parseInt(sketch_style.getPropertyValue('width'));
         canvas.height = parseInt(sketch_style.getPropertyValue('height'));
 
-        var mouse = {x: 0, y: 0};
-        var last_mouse = {x: 0, y: 0};
 
-        /* Mouse Capturing Work */
+        var mouse = {
+            x: 0,
+            y: 0
+        };
+        var last_mouse = {
+            x: 0,
+            y: 0
+        };
+        let selectedTool="pincel";
+        const dibujarRectangulo=(e)=>{
+            //ctx.strokeRect(mouse.x,mouse.y, )
+            //https://www.youtube.com/watch?v=y84tBZo8GFo
+        }
+
+        const deshacer = () => {
+            
+            //var hojas[0].clearRect(0, 0, canvas.width, canvas.height);
+            //console.log(hojas[0]);
+          };
+        /* captura del ratón */
         canvas.addEventListener('mousemove', function(e) {
             last_mouse.x = mouse.x;
             last_mouse.y = mouse.y;
@@ -66,7 +82,7 @@ class Pizarra extends Component{
         }, false);
 
 
-        /* Drawing on Paint App */
+        /* Dibujar en la aplicación Paint */
         ctx.lineWidth = this.props.size;
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
@@ -88,12 +104,16 @@ class Pizarra extends Component{
             ctx.closePath();
             ctx.stroke();
 
-            if(root.timeout != undefined) clearTimeout(root.timeout);
+            if(root.timeout !== undefined) clearTimeout(root.timeout);
             root.timeout = setTimeout(function(){
                 var base64ImageData = canvas.toDataURL("image/png");
                 root.socket.emit("canvas-data", base64ImageData);
             }, 1000)
         };
+    }
+
+    gardararchivo(){
+
     }
 
     render() {
